@@ -1,5 +1,5 @@
 # MESSENGER
-## A SIMPLE PYTHON SCRIPT FILE FOR A CHATROOM/MESSENGER SERVER AND ASSOCIATED REMOTE ACCESS CLIENT(S).
+## SIMPLE PYTHON SCRIPT FILES FOR A CHATROOM/MESSENGER STYLE SERVER AND ASSOCIATED REMOTE ACCESS CLIENT(S).
 
 Usage: python server.py</br>
 Usage: python client.py localhost 9009
@@ -15,7 +15,7 @@ Usage: python client.py localhost 9009
       https://github.com/BroadbentT/BASE64-BLOWFISH
       https://github.com/BroadbentT/BASE64-DNA
       
- A simple python script file for a chatroom/messenger server and associated remote access client(s).
+ A simple chatroom/messenger server with associated remote access client.
  
 ### CONSOLE DISPLAY
 ![Screenshot](picture1.png)
