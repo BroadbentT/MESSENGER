@@ -15,7 +15,7 @@ Usage: python client.py localhost 9009
       https://github.com/BroadbentT/BASE64-BLOWFISH
       https://github.com/BroadbentT/BASE64-DNA
       
- A simple chatroom/messenger server with associated remote access client.
+ A simple chatroom/messenger server with associated remote access client(s).
  
 ### CONSOLE DISPLAY
 ![Screenshot](picture1.png)
