@@ -6,7 +6,7 @@ Usage: python client.py localhost 9009
 
 | LANGUAGE  | FILENAME  | MD5 Hash                         |
 |------     |------     | -------                          |
-| python    | server.py | dc6a1c97fee3338c2c27de479efe106e |
+| python    | server.py | c4a08eb54dfaa0a2a0dd2fee43d3b5b0 |
 | python    | client.py | 2a518780875b9cd12aeec82af23dbaba |
 
 - [x] Add any of the following encryption functions to anonymize the datastream.

@@ -69,42 +69,41 @@ def chat_server():
    server_socket.bind((host, port))
    server_socket.listen(10)
    socketList.append(server_socket)
-   # Server Log
    now = datetime.now()
-   print "This chat server sucessfully started running on host " + str(host) + ":" + str(port) + " on " + now.strftime("%x at %H:%M hours.\n")
+   print now.strftime("%x %H:%M"),
+   print "- Successfully started chat server on host " + host + ":" + str(port) + "."
 
    while 1:
+      now = datetime.now()
       ready_to_read,ready_to_write,in_error = select.select(socketList,[],[],0)
       for sock in ready_to_read:
          if sock == server_socket:
             sockfd, addr = server_socket.accept()
             socketList.append(sockfd)
-            broadcast(server_socket, sockfd, "\r" + "Client %s:%s entered the chat room...\n" % addr)
-            # Server Log
-            now = datetime.now()
-            print now.strftime("%x %H:%M" + " - client %s:%s connected." % addr)
+            broadcast(server_socket, sockfd, "\r" + "[%s:%s] entered the chat room...\n" % addr)
+            print now.strftime("%x %H:%M"),
+            print "- Client %s:%s connected." % addr
          else:
             try:
                data = sock.recv(recvBuffer)
                if data:
                   temp = str(sock.getpeername()).replace("'","").replace("(","").replace(")","").replace(", ",":")
-                  broadcast(server_socket, sock, "\r" + "Client " + temp + " says: " + data)
+                  broadcast(server_socket, sock, "\r" + "[" + temp + "] " + data)
                else:
                   if sock in socketList:
                      socketList.remove(sock)
                   temp = str(sock.getpeername()).replace("'","").replace("(","").replace(")","").replace(", ",":")
-                  broadcast(server_socket, sock, "\r" + "Client " + temp + " has disconnected...\n")
-                  # Server Log
-                  now = datetime.now()
-                  print now.strftime("%x %H:%M - client " + temp + " disconnected.")
+                  broadcast(server_socket, sock, "\r" + "[" + temp + "] has disconnected...\n")
+                  print now.strftime("%x %H:%M"),
+                  print "- Client " + temp + " disconnected."
             except:
-               broadcast(server_socket, sock, "\r" + "Client " + str(sock.getpeername()) + " is offline...\n")
-               # Server Log
-               now = datetime.now()
-               print now.strftime("%x %H:%M - client " + str(sock.getpeername()) + " is offline.")
+               temp = str(sock.getpeername()).replace("'","").replace("(","").replace(")","").replace(", ",":")
+               broadcast(server_socket, sock, "\r" + "[" + temp + "] is offline...\n")
+               print now.strftime("%x %H:%M"),
+               print "- Client " + temp + " is offline...\n"
             continue
 
-#   server_socket.close()
+   server_socket.close()
     
 # -------------------------------------------------------------------------------------
 # Broadcast chat messages to all connected clients and tidy up any redundant clients.
