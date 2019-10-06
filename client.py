@@ -2,7 +2,7 @@
 # coding:UTF-8
 
 # -------------------------------------------------------------------------------------
-#                      A SIMPLE PYTHON SCRIPT FILE CHAT CLIENT
+#                     A SIMPLE PYTHON SCRIPT FILE - CHAT CLIENT
 #               BY TERENCE BROADBENT BSc CYBER SECURITY (FIRST CLASS)
 # -------------------------------------------------------------------------------------
 
@@ -23,18 +23,18 @@ import select
 # AUTHOR  : Terence Broadbent                                                    
 # CONTRACT: GitHub                                                               
 # Version : 1.0                                                                
-# Details : Display my universal header.
+# Details : Display universal banner.
 # Modified: N/A                                                               
 # -------------------------------------------------------------------------------------
 
 os.system("clear")
-print "\t\t\t\t  ____ _   _    _  _____    ____ _     ___ _____ _   _ _____  "
-print "\t\t\t\t / ___| | | |  / \|_   _|  / ___| |   |_ _| ____| \ | |_   _| "
-print "\t\t\t\t| |   | |_| | / _ \ | |   | |   | |    | ||  _| |  \| | | |   "
-print "\t\t\t\t| |___|  _  |/ ___ \| |   | |___| |___ | || |___| |\  | | |   "
-print "\t\t\t\t \____|_| |_/_/   \_\_|    \____|_____|___|_____|_| \_| |_|   "
-print "\t\t\t\t                                                              "
-print "\t\t\t\t   BY TERENCE BROADBENT BSC CYBER SECURITY (FIRST CLASS)    \n"
+print "  ____ _   _    _  _____    ____ _     ___ _____ _   _ _____  "
+print " / ___| | | |  / \|_   _|  / ___| |   |_ _| ____| \ | |_   _| "
+print "| |   | |_| | / _ \ | |   | |   | |    | ||  _| |  \| | | |   "
+print "| |___|  _  |/ ___ \| |   | |___| |___ | || |___| |\  | | |   "
+print " \____|_| |_/_/   \_\_|    \____|_____|___|_____|_| \_| |_|   "
+print "                                                              "
+print "   BY TERENCE BROADBENT BSC CYBER SECURITY (FIRST CLASS)    \n"
 
 # ------------------------------------------------------------------------------------- 
 # AUTHOR  : Terence Broadbent                                                    
@@ -45,11 +45,12 @@ print "\t\t\t\t   BY TERENCE BROADBENT BSC CYBER SECURITY (FIRST CLASS)    \n"
 # -------------------------------------------------------------------------------------
 
 if(len(sys.argv) < 3):
-   print 'Usage : python client.py hostname port'
+   print "Usage : python client.py host port"
    sys.exit()
 else:
    host = sys.argv[1]
    port = int(sys.argv[2])
+   user = "[Me] "
 
 # ------------------------------------------------------------------------------------- 
 # AUTHOR  : Terence Broadbent                                                    
@@ -59,50 +60,46 @@ else:
 # Modified: N/A
 # -------------------------------------------------------------------------------------
 
-# -------------------------------------------------------------------------------------
-# Main chat client with infinite loop.
-# -------------------------------------------------------------------------------------
+def log(msg):
+   sys.stdout.write(msg)
+   sys.stdout.flush()
  
-def chat_client():   
-   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   s.settimeout(2)   
-   try :
-      s.connect((host, port))
-   except :
-      print 'Unable to connect?...'
-      sys.exit()     
-
-   print 'Sucessfully connected to remote host, you can now start sending messages...\n'
-   sys.stdout.write('[Me] ')
-   sys.stdout.flush()   
+def client():
+   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   client.settimeout(2)
+   try:
+      client.connect((host, port))
+      log("Sucessfully connected to remote host, you can now start sending messages...\n\n")
+      log(user)
+   except:
+      log("Unable to connect?...\n")
+      sys.exit()
 
    while 1:
-      socket_list = [sys.stdin, s]
+      socket_list = [sys.stdin, client]
       ready_to_read,ready_to_write,in_error = select.select(socket_list , [], [])
       for sock in ready_to_read:
-         if sock == s:
+         if sock == client:
             data = sock.recv(4096)			# Use 2048 for quicker responce
-            if not data :
-               print '\nDisconnected from chat server...'
+            if not data:
+               log("\n\nDisconnected from chat server?...\n\n")
                sys.exit()
             else :
-               sys.stdout.write(data)
-               sys.stdout.write('[Me] ')
-               sys.stdout.flush()
+               log(data)
+               log(user)
          else :
             msg = sys.stdin.readline()
-            s.send(msg)
-            sys.stdout.write('[Me] ')
-            sys.stdout.flush() 
+            client.send(msg)
+            log(user)
 
 # ------------------------------------------------------------------------------------- 
 # AUTHOR  : Terence Broadbent                                                    
 # CONTRACT: GitHub
-# Version : 1.0                                                                
+# Version : 1.0                                                          	      
 # Details : MAIN - Start the client interface.
 # Modified: N/A
 # -------------------------------------------------------------------------------------
 
-sys.exit(chat_client())
+sys.exit(client())
 
 #Eof

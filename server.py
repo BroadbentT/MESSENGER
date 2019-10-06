@@ -24,18 +24,18 @@ from datetime import datetime
 # AUTHOR  : Terence Broadbent                                                    
 # CONTRACT: GitHub                                                               
 # Version : 1.0                                                                
-# Details : Display my universal header.
+# Details : Display universal header.
 # Modified: N/A                                                               
 # -------------------------------------------------------------------------------------
 
 os.system("clear")
-print "\t\t\t\t  ____ _   _    _  _____   ____  _____ ______     _______ ____   "
-print "\t\t\t\t / ___| | | |  / \|_   _| / ___|| ____|  _ \ \   / / ____|  _ \  "
-print "\t\t\t\t| |   | |_| | / _ \ | |   \___ \|  _| | |_) \ \ / /|  _| | |_) | "
-print "\t\t\t\t| |___|  _  |/ ___ \| |    ___) | |___|  _ < \ V / | |___|  _ <  "
-print "\t\t\t\t \____|_| |_/_/   \_\_|   |____/|_____|_| \_\ \_/  |_____|_| \_\ "
-print "\t\t\t\t                                                                 "
-print "\t\t\t\t     BY TERENCE BROADBENT BSC CYBER SECURITY (FIRST CLASS)     \n"
+print "  ____ _   _    _  _____   ____  _____ ______     _______ ____   "
+print " / ___| | | |  / \|_   _| / ___|| ____|  _ \ \   / / ____|  _ \  "
+print "| |   | |_| | / _ \ | |   \___ \|  _| | |_) \ \ / /|  _| | |_) | "
+print "| |___|  _  |/ ___ \| |    ___) | |___|  _ < \ V / | |___|  _ <  "
+print " \____|_| |_/_/   \_\_|   |____/|_____|_| \_\ \_/  |_____|_| \_\ "
+print "                                                                 "
+print "     BY TERENCE BROADBENT BSC CYBER SECURITY (FIRST CLASS)     \n"
 
 # ------------------------------------------------------------------------------------- 
 # AUTHOR  : Terence Broadbent                                                    
@@ -49,7 +49,7 @@ host = sys.argv[1]
 port = int(sys.argv[2])
 temp = ""
 socketList = []
-recvBuffer = 4096 					# Use 2048 for quicker responce
+recvBuffer = 4096
 
 # ------------------------------------------------------------------------------------- 
 # AUTHOR  : Terence Broadbent                                                    
@@ -59,9 +59,10 @@ recvBuffer = 4096 					# Use 2048 for quicker responce
 # Modified: N/A
 # -------------------------------------------------------------------------------------
 
-# -------------------------------------------------------------------------------------
-# Main chat server routine with infinite loop.
-# -------------------------------------------------------------------------------------
+def timelog(msg):
+   now = datetime.now()
+   print now.strftime("%x %H:%M"),
+   print msg
 
 def chat_server():
    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -69,9 +70,7 @@ def chat_server():
    server_socket.bind((host, port))
    server_socket.listen(10)
    socketList.append(server_socket)
-   now = datetime.now()
-   print now.strftime("%x %H:%M"),
-   print "- Successfully started chat server on host " + host + ":" + str(port) + "."
+   timelog("- Successfully started chat server on host " + host + ":" + str(port) + ".")
 
    while 1:
       now = datetime.now()
@@ -81,8 +80,7 @@ def chat_server():
             sockfd, addr = server_socket.accept()
             socketList.append(sockfd)
             broadcast(server_socket, sockfd, "\r" + "[%s:%s] entered the chat room...\n" % addr)
-            print now.strftime("%x %H:%M"),
-            print "- Client %s:%s connected." % addr
+            timelog("- Client %s:%s connected." % addr)
          else:
             try:
                data = sock.recv(recvBuffer)
@@ -94,21 +92,12 @@ def chat_server():
                      socketList.remove(sock)
                   temp = str(sock.getpeername()).replace("'","").replace("(","").replace(")","").replace(", ",":")
                   broadcast(server_socket, sock, "\r" + "[" + temp + "] has disconnected...\n")
-                  print now.strftime("%x %H:%M"),
-                  print "- Client " + temp + " disconnected."
+                  timelog("- Client " + temp + " disconnected.")
             except:
-               temp = str(sock.getpeername()).replace("'","").replace("(","").replace(")","").replace(", ",":")
-               broadcast(server_socket, sock, "\r" + "[" + temp + "] is offline...\n")
-               print now.strftime("%x %H:%M"),
-               print "- Client " + temp + " is offline...\n"
-            continue
-
-   server_socket.close()
+               timelog("- Oops!! - Looks like a major error occuried...")
+               server_socket.close()
+               sys.exit()
     
-# -------------------------------------------------------------------------------------
-# Broadcast chat messages to all connected clients and tidy up any redundant clients.
-# -------------------------------------------------------------------------------------
-
 def broadcast (server_socket, sock, message):
    for socket in socketList:
       if socket != server_socket and socket != sock :
