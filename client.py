@@ -18,6 +18,7 @@ import os
 import sys
 import socket
 import select
+from termcolor import colored					# pip install termcolor
 
 # -------------------------------------------------------------------------------------
 # AUTHOR  : Terence Broadbent                                                    
@@ -63,6 +64,9 @@ else:
 def log(msg):
    sys.stdout.write(msg)
    sys.stdout.flush()
+
+def message(msg):
+   print colored("\r" + msg,'white'),
  
 def client():
    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,7 +89,7 @@ def client():
                log("\n\nDisconnected from chat server?...\n\n")
                sys.exit()
             else :
-               log(data)
+               message(data)
                log(user)
          else :
             msg = sys.stdin.readline()
